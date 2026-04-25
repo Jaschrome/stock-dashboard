@@ -16,6 +16,15 @@ def fetch_and_store(symbol: str):
         if df.empty:
             return False, f"No data found for symbol: {symbol}"
 
+        # Get currency and name from ticker info
+        try:
+            info = ticker.info
+            currency = info.get("currency", "USD")
+            name = info.get("longName") or info.get("shortName") or symbol
+        except Exception:
+            currency = "USD"
+            name = symbol
+
         df.reset_index(inplace=True)
 
         # Normalize column names
@@ -53,6 +62,12 @@ def fetch_and_store(symbol: str):
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, [(symbol, *row) for row in rows])
 
+        # Store currency and name in meta table
+        cursor.execute("""
+            INSERT OR REPLACE INTO stock_meta (symbol, currency, name)
+            VALUES (?, ?, ?)
+        """, (symbol, currency, name))
+
         conn.commit()
         conn.close()
 
@@ -78,6 +93,16 @@ def get_last_n_days(symbol: str, days: int = 30):
     conn.close()
 
     return [dict(row) for row in rows][::-1]  # Return in chronological order
+
+
+def get_currency(symbol: str) -> str:
+    """Returns the currency for a given symbol from stock_meta table."""
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT currency FROM stock_meta WHERE symbol = ?", (symbol,))
+    row = cursor.fetchone()
+    conn.close()
+    return row["currency"] if row else "USD"
 
 
 def get_summary(symbol: str):
