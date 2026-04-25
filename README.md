@@ -134,5 +134,6 @@ stock-dashboard/
 - **Name** : Jairaj Singh Jabbal
 - **Email** : jaschrome040@gmail.com
 - **Github** : www.github.com/Jaschrome
+- **Linkedin** : https://www.linkedin.com/in/jairaj-jabbal-87a275282/
 
 Built with ❤️ for the JarNox Internship Assignment.
