@@ -6,14 +6,14 @@ A mini financial data platform built as part of the **JarNox Software Internship
 
 ##  Features
 
-- ✅ Fetches **real stock data** using `yfinance` (NSE, BSE, US markets)
-- ✅ Stores and manages data in **SQLite** (zero setup)
-- ✅ **FastAPI** backend with auto-generated Swagger docs
-- ✅ Computed metrics: Daily Return, 7-day Moving Average, 52-week High/Low
-- ✅ Custom metric: **Annualized Volatility Score**
-- ✅ Interactive **dashboard** with Chart.js
-- ✅ Top Gainers / Losers insight panel
-- ✅ Stock comparison tool
+-  Fetches **real stock data** using `yfinance` (NSE, BSE, US markets)
+-  Stores and manages data in **SQLite** (zero setup)
+-  **FastAPI** backend with auto-generated Swagger docs
+-  Computed metrics: Daily Return, 7-day Moving Average, 52-week High/Low
+-  Custom metric: **Annualized Volatility Score**
+-  Interactive **dashboard** with Chart.js
+-  Top Gainers / Losers insight panel
+-  Stock comparison tool
 
 ---
 
