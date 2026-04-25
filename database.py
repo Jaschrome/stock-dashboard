@@ -37,22 +37,13 @@ def init_db():
         )
     """)
 
-    # Seed some default companies (popular Indian + US stocks)
-    companies = [
-        ("INFY", "Infosys", "IT"),
-        ("TCS.NS", "Tata Consultancy Services", "IT"),
-        ("RELIANCE.NS", "Reliance Industries", "Energy"),
-        ("HDFCBANK.NS", "HDFC Bank", "Finance"),
-        ("AAPL", "Apple Inc.", "Technology"),
-        ("GOOGL", "Alphabet Inc.", "Technology"),
-        ("MSFT", "Microsoft", "Technology"),
-        ("TSLA", "Tesla", "Automotive"),
-    ]
-
-    cursor.executemany(
-        "INSERT OR IGNORE INTO companies (symbol, name, sector) VALUES (?, ?, ?)",
-        companies
-    )
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS stock_meta (
+            symbol TEXT PRIMARY KEY,
+            currency TEXT DEFAULT 'USD',
+            name TEXT
+        )
+    """)
 
     conn.commit()
     conn.close()
