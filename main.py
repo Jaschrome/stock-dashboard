@@ -2,8 +2,11 @@ from fastapi import FastAPI, HTTPException, Query, BackgroundTasks
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from database import init_db, get_connection
-from data import fetch_and_store, get_last_n_days, get_summary, get_volatility, compare_stocks
+from data import fetch_and_store, get_last_n_days, get_summary, get_volatility, compare_stocks, get_currency
+import yfinance as yf
 import os
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # ── App Setup ────────────────────────────────────────────────────────────────
 app = FastAPI(
@@ -18,13 +21,13 @@ def startup():
     init_db()
 
 # Serve static files (dashboard HTML)
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "static")), name="static")
 
 
 # ── Root → Dashboard ─────────────────────────────────────────────────────────
 @app.get("/", include_in_schema=False)
 def root():
-    return FileResponse("static/index.html")
+    return FileResponse(os.path.join(BASE_DIR, "static", "index.html"))
 
 
 # ── 1. GET /companies ─────────────────────────────────────────────────────────
@@ -37,6 +40,40 @@ def list_companies():
     rows = cursor.fetchall()
     conn.close()
     return [dict(row) for row in rows]
+
+
+# ── 1b. GET /search ───────────────────────────────────────────────────────────
+@app.get("/search", tags=["Data"])
+def search_stocks(q: str = Query(..., description="Company name or symbol e.g. Tesla or TSLA")):
+    """
+    Search for stocks by company name or symbol using yfinance.
+    Returns up to 8 matching results.
+    """
+    try:
+        results = yf.Search(q, max_results=8).quotes
+        if not results:
+            return []
+
+        cleaned = []
+        for r in results:
+            symbol = r.get("symbol", "")
+            name = r.get("longname") or r.get("shortname") or symbol
+            type_ = r.get("quoteType", "")
+            exchange = r.get("exchange", "")
+
+            # Only return stocks and ETFs, skip futures/crypto/etc
+            if type_ in ("EQUITY", "ETF") and symbol:
+                cleaned.append({
+                    "symbol": symbol,
+                    "name": name,
+                    "exchange": exchange,
+                    "type": type_
+                })
+
+        return cleaned
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 # ── 2. GET /data/{symbol} ─────────────────────────────────────────────────────
@@ -82,6 +119,7 @@ def get_stock_summary(symbol: str):
 
     volatility = get_volatility(symbol)
     summary["volatility_score_pct"] = volatility
+    summary["currency"] = get_currency(symbol)
 
     return {"symbol": symbol, **summary}
 
@@ -161,9 +199,8 @@ def top_gainers_losers():
     cursor = conn.cursor()
 
     cursor.execute("""
-        SELECT sd.symbol, c.name, sd.daily_return, sd.close, sd.date
+        SELECT sd.symbol, sd.daily_return, sd.close, sd.date
         FROM stock_data sd
-        JOIN companies c ON sd.symbol = c.symbol
         WHERE sd.date = (
             SELECT MAX(date) FROM stock_data WHERE symbol = sd.symbol
         )
