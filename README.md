@@ -3,6 +3,9 @@
 A mini financial data platform built as part of the **JarNox Software Internship Assignment**.
 
 ---
+<p align="center">
+  <img src="screenshot.png" alt="Stock Intelligence Dashboard" width="600">
+</p>
 
 ##  Features
 
