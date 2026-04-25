@@ -1,10 +1,10 @@
-# 📈 Stock Data Intelligence Dashboard
+#  Stock Data Intelligence Dashboard
 
 A mini financial data platform built as part of the **JarNox Software Internship Assignment**.
 
 ---
 
-## 🚀 Features
+##  Features
 
 - ✅ Fetches **real stock data** using `yfinance` (NSE, BSE, US markets)
 - ✅ Stores and manages data in **SQLite** (zero setup)
@@ -17,7 +17,7 @@ A mini financial data platform built as part of the **JarNox Software Internship
 
 ---
 
-## 🧱 Tech Stack
+##  Tech Stack
 
 | Layer | Technology |
 |-------|------------|
@@ -29,7 +29,7 @@ A mini financial data platform built as part of the **JarNox Software Internship
 
 ---
 
-## ⚙️ Setup Instructions
+##  Setup Instructions
 
 ### 1. Clone the repo
 ```bash
@@ -65,7 +65,7 @@ http://localhost:8000/docs
 
 ---
 
-## 📡 API Endpoints
+##  API Endpoints
 
 | Endpoint | Method | Description |
 |----------|--------|-------------|
@@ -79,7 +79,7 @@ http://localhost:8000/docs
 
 ---
 
-## 📊 Calculated Metrics
+##  Calculated Metrics
 
 | Metric | Formula |
 |--------|---------|
@@ -90,7 +90,7 @@ http://localhost:8000/docs
 
 ---
 
-## 💡 Custom Insight: Volatility Score
+##  Custom Insight: Volatility Score
 
 The **Volatility Score** is a custom metric that measures how much a stock's price fluctuates over time.
 
@@ -102,7 +102,7 @@ This is a standard finance metric used by analysts to assess investment risk.
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 stock-dashboard/
@@ -117,7 +117,7 @@ stock-dashboard/
 
 ---
 
-## 🎯 Design Decisions
+##  Design Decisions
 
 - **SQLite over PostgreSQL**: Chosen for zero-setup simplicity and portability. Can be swapped to PostgreSQL easily via SQLAlchemy.
 - **yfinance**: Provides free, reliable access to global stock data with no API key.
@@ -126,6 +126,10 @@ stock-dashboard/
 
 ---
 
-## 👤 Author
+##  Author
+
+- **Name** : Jairaj Singh Jabbal
+- **Email** : jaschrome040@gmail.com
+- **Github** : www.github.com/Jaschrome
 
 Built with ❤️ for the JarNox Internship Assignment.
